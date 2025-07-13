@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reminder App</title>
+    <link rel="stylesheet" href="{% static 'reminder.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Reminder App</h1>
+        <p>Link your Google Account to sync Calendar and receive reminders.</p>
+        <a href="{% url 'authorize' %}" class="button">Link Google Account</a>
+
+        <form action="{% url 'send_notification' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="button">Send Email Notification</button>
+        </form>
+
+        <h2>Your Upcoming Events:</h2>
+        <ul>
+            {% if events %}
+                {% for event in events %}
+                    <li>{{ event.summary }} at {{ event.start.dateTime|default:event.start.date }}</li>
+                {% endfor %}
+            {% else %}
+                <li>No upcoming events found.</li>
+            {% endif %}
+        </ul>
+    </div>
+</body>
+</html>
